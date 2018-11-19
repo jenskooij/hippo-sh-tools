@@ -1,3 +1,4 @@
+#!/bin/bash
 check_errs()
 {
   # Function. Parameter 1 is the return code
