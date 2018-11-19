@@ -9,25 +9,16 @@ check_errs()
   fi
 }
 
-echo "****************"
-echo "* Version bump *"
-echo "****************"
+echo ""
+echo "*********************"
+echo "* Version bump      *"
+echo "*********************"
+echo ""
 
 if [ -z "$1" ]
 then
-	versionNumber=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }'`
-	echo "Please provide the version number you want to bump to. Current version is: $versionNumber"
-	
-	cleaned=`echo $versionNumber | sed -e 's/[^0-9][^0-9]*$//'`
-	last_num=`echo $cleaned | sed -e 's/[0-9]*\.//g'`
-	next_num=$((10#$last_num+1))
-	suggestedVersion=`echo $versionNumber | sed -e "s/[0-9][0-9]*\([^0-9]*\)$/$next_num/"`
-	echo "If you leave the input empty, will upgrade to $suggestedVersion"
-	read newVersion
-	if [ -z "$newVersion" ]
-	then
-		newVersion=`echo $suggestedVersion`
-	fi
+	echo "[ERROR] #1: No version number provided as first argument"
+	exit 1
 else
 	newVersion=$1
 fi
@@ -37,7 +28,9 @@ echo "1. Upgrade maven version"
 mvn -q versions:set -DgenerateBackupPoms=false -DnewVersion=$newVersion > /dev/null 2>&1
 check_errs $? "Maven operation failed."
 echo "2. Commit changes"
-git commit -am "Version bump to $newVersion" > /dev/null 2>&1
+git add . > /dev/null 2>&1
+git commit -am "[sh-tools] Upgraded maven version to $newVersion" > /dev/null 2>&1
 check_errs $? "Git operation failed."
 echo ""
 echo "[SUCCESS]"
+export newVersion
