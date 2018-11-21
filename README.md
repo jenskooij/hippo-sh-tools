@@ -12,6 +12,12 @@ This tool will:
 7. (optionally) Build your release artifact (mvn clean verify && mvn -Pdist)
 8. Push the changes to your remote Git repository
 
+## Usage
+```
+prepare-release
+```
+![Demo of usage](./demo.gif)
+
 ## Getting Started
 
 ### Prerequisites
