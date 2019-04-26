@@ -81,7 +81,7 @@ then
 	echo "*********************"
 	echo ""
 	echo "1. Tagging the release with release/$newVersion"
-	git tag release/$newVersion
+	git tag $newVersion
 	check_errs $? "Error tagging the new versions with tag release/$newVersion"
 	echo ""
 	echo "[SUCCESS]"
@@ -112,7 +112,8 @@ echo "* Git Push          *"
 echo "*********************"
 echo ""
 echo "1. Pushing to remote repository"
-git push --tags > /dev/null 2>&1
+currentBranch=`git branch | grep \* | cut -d ' ' -f2`
+git push origin $currentBranch --tags > /dev/null 2>&1
 check_errs $? "Error pushing to remote git repository"
 echo ""
 echo "[SUCCESS]"
